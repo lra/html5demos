@@ -1,11 +1,17 @@
+var canvas = document.getElementById('view');
+var context = canvas.getContext('2d');
+context.beginPath();
+context.textAlign="center"; 
+context.font="20pt Calibri";
+context.fillStyle="#ffffff";
+context.fillText("Click me!", canvas.width/2, canvas.height/2);
+
+var timerId;
+
 function draw()
 {
-	var canvas = document.getElementById('view');
-	var context = canvas.getContext('2d');
 	var pixels = context.createImageData(canvas.width, canvas.height);
-	var currentIteration = 1;
 	var fps = 60;
-	var intval;
 	var palette = Array();
 	var buffer = Array();
 	var bufferExtraHeight = 3;
@@ -13,15 +19,7 @@ function draw()
 	function setup()
 	{
 		createPalette();
-		
-		// Initialize pixel buffer
-		for (var x = 0; x < canvas.width; x++)
-		{
-			for (var y = 0; y < canvas.height + bufferExtraHeight; y++)
-			{
-				setBufferColor(x, y, 0);
-			}
-		}
+		clearBuffer();
 	}
 	
 	function createPalette()
@@ -60,6 +58,18 @@ function draw()
 			palette[i + 192] = rgb;
 		}
 	}
+
+	function clearBuffer()
+	{
+		// Initialize pixel buffer
+		for (var x = 0; x < canvas.width; x++)
+		{
+			for (var y = 0; y < canvas.height + bufferExtraHeight; y++)
+			{
+				setBufferColor(x, y, 0);
+			}
+		}
+	}
 	
 	function setBufferColor(x, y, color)
 	{
@@ -84,7 +94,7 @@ function draw()
 	{
 		var x;
 		var y;
-		for (x = 25; x < canvas.width-25; x++)
+		for (x = 0; x < canvas.width; x++)
 		{
 			var color;
 			color = Math.round(100 + 50 * Math.random());
@@ -95,13 +105,15 @@ function draw()
 		var nb_blocs = 10 + Math.round(40 * Math.random());
 		for (var bloc = 0; bloc < nb_blocs; bloc++)
 		{
-			x = 25 + Math.round(Math.random() * (canvas.width - 50));
+			x = Math.round(Math.random() * canvas.width);
 			setBufferColor(x-1, canvas.height - 3 + bufferExtraHeight, palette.length-1);
 			setBufferColor(x  , canvas.height - 3 + bufferExtraHeight, palette.length-1);
 			setBufferColor(x+1, canvas.height - 3 + bufferExtraHeight, palette.length-1);
+			
 			setBufferColor(x-1, canvas.height - 2 + bufferExtraHeight, palette.length-1);
 			setBufferColor(x  , canvas.height - 2 + bufferExtraHeight, palette.length-1);
 			setBufferColor(x+1, canvas.height - 2 + bufferExtraHeight, palette.length-1);
+			
 			setBufferColor(x-1, canvas.height - 1 + bufferExtraHeight, palette.length-1);
 			setBufferColor(x  , canvas.height - 1 + bufferExtraHeight, palette.length-1);
 			setBufferColor(x+1, canvas.height - 1 + bufferExtraHeight, palette.length-1);
@@ -131,6 +143,17 @@ function draw()
 		context.putImageData(pixels, 0, 0);
 	}
 	
-	setup();
-	setInterval(render, 1000 / fps);
+
+	if (timerId)
+	{
+		clearInterval(timerId);
+		console.log('killed timer '+timerId)
+		timerId = null;
+	}
+	else
+	{
+		setup();
+		timerId = setInterval(render, 1000 / fps);		
+		console.log('started timer '+timerId)
+	}
 }
