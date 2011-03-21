@@ -1,3 +1,5 @@
+var timerId;
+
 function draw()
 {
 	var canvas = document.getElementById('view');
@@ -6,7 +8,6 @@ function draw()
 	var currentIteration = 1;
 	var maxIteration = 50;
 	var fps = 60;
-	var intval;
 
 	function computeColor(x, y, max_iteration)
 	{
@@ -45,9 +46,21 @@ function draw()
 		currentIteration++;
 		if (currentIteration > maxIteration)
 		{
-			clearInterval(intval);
+			clearInterval(timerId);
+			timerId = null;
+			console.log('fin');
 		}
 	}
 	
-	intval = setInterval(render, 1000 / fps);
+	if (timerId)
+	{
+		clearInterval(timerId);
+		timerId = null;
+		console.log('stop');
+	}
+	else
+	{
+		timerId = setInterval(render, 1000 / fps);	
+		console.log('start');	
+	}
 }
