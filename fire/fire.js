@@ -147,13 +147,11 @@ function draw()
 	if (timerId)
 	{
 		clearInterval(timerId);
-		console.log('killed timer '+timerId)
 		timerId = null;
 	}
 	else
 	{
 		setup();
 		timerId = setInterval(render, 1000 / fps);		
-		console.log('started timer '+timerId)
 	}
 }
