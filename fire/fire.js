@@ -4,7 +4,6 @@ function draw()
 	var context = canvas.getContext('2d');
 	var pixels = context.createImageData(canvas.width, canvas.height);
 	var currentIteration = 1;
-	var maxIteration = 1000;
 	var fps = 60;
 	var intval;
 	var palette = Array();
@@ -165,14 +164,8 @@ function draw()
 			}
 		}
 		context.putImageData(pixels, 0, 0);
-		currentIteration++;
-		if (currentIteration > maxIteration)
-		{
-			clearInterval(intval);
-			console.log('Finished!');
-		}
 	}
 	
 	setup();
-	intval = setInterval(render, 1000 / fps);
+	setInterval(render, 1000 / fps);
 }
