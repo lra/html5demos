@@ -76,7 +76,7 @@ function draw()
 		buffer[x + y * canvas.width] = color;
 	}
 	
-	function getBufferColor(x, y, color)
+	function getBufferColor(x, y)
 	{
 		return buffer[x + y * canvas.width];
 	}
